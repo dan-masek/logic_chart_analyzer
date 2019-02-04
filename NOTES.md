@@ -44,11 +44,15 @@ Represents a logic operation (gate). We support 2 types of gates:
 
 #### `UnaryGate`
 
+![Image](img/example_unary_gate.jpg)
+
 A gate with 1 input and 1 output (e.g. NOT).
 
 Generated logical expression is in form `(<name> <input>)`
 
 #### `BinaryGate`
+
+![Image](img/example_binary_gate.jpg) ![Image](img/example_ternary_gate.jpg)
 
 **NB:** Misnomer, this is more like N-aryGate where N > 1
 
