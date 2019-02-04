@@ -10,7 +10,8 @@ lines = dataset_1["lines"]
 
 # ============================================================================
 
-out_img = np.zeros((2000, 3200, 3), np.uint8)
+#out_img = np.zeros((2000, 3200, 3), np.uint8)
+out_img = cv2.imread('logic_chart_1.jpg')
 
 for line in lines:
     cv2.line(out_img, line[0], line[1], (0, 255, 0), 2)

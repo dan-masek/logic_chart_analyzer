@@ -24,11 +24,15 @@ Others are created while processing, to facilitate easy connections and junction
 
 ### `InputTerm`
 
+![Image](img/example_input.jpg)
+
 Has 0 inputs, and 1 output. Represents an input variable (e.g. J,K,M,...)
 
 Generated logical expression is the term itself: `<name>`
 
 ### `OutputTerm`
+
+![Image](img/example_output.jpg)
 
 Has 1 input and 0 outputs. Represents the result of the expression (e.g. Q)
 
@@ -46,11 +50,21 @@ Generated logical expression is in form `(<name> <input>)`
 
 #### `BinaryGate`
 
-A gate with 2 inputs and 1 output (e.g. AND, OR, XOR, ...)
+**NB:** Misnomer, this is more like N-aryGate where N > 1
 
-Generated logical expression is in form `(<input-1> <name> <input-2>)`
+**TODO:** Implement support for more than 2 inputs.
+
+A gate with 2-4 inputs and 1 output (e.g. AND, OR, XOR, ...)
+
+Generated logical expression with 2 inputs is in form `(<input-1> <name> <input-2>)`
+
+Generated logical expression with 3 inputs is in form `(<input-1> <name> <input-2> <name> <input-3>)`
+
+Generated logical expression with 4 inputs is in form `(<input-1> <name> <input-2> <name> <input-3> <name> <input-4>)`
 
 ### `Node`
+
+![Image](img/example_node_pair.jpg)
 
 Has 1 input and 1 output. A pair of nodes represents a bridge (to avoid crossing lines).
 
@@ -58,11 +72,15 @@ Generated logical expression is: `<input>`
 
 ### `Connection`
 
+![Image](img/example_connection.jpg)
+
 Has 1 input and 1 output. Represents a corner in the connecting lines (horizontal and vertical lines connected at the end).
 
 Generated logical expression is: `<input>`
 
 ### `Junction`
+
+![Image](img/example_junction.jpg)
 
 Has 1 input and 2 outputs. Represents a T-connection between a horizontal and vertical line.
 
