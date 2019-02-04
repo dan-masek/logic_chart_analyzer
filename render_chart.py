@@ -20,4 +20,7 @@ for label in labels:
     p2 = int(label[2][0]), int(label[2][1])
     cv2.rectangle(out_img, p1, p2, (0, 0, 255), 2)
     
+    pt = p1[0] + 10, p1[1] + 30
+    cv2.putText(out_img, label[0], pt, cv2.FONT_HERSHEY_DUPLEX, 1, (127, 127, 255))
+    
 cv2.imwrite('logic_output.png', out_img)
