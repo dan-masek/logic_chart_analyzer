@@ -1,9 +1,14 @@
 import numpy as np
 import cv2
 
-from logic_data import labels, lines
+from logic_data import *
 from logic_utils import *
 from logic_classes import *
+
+# ============================================================================
+
+labels = dataset_1["labels"]
+lines = dataset_1["lines"]
 
 # ============================================================================
 
@@ -40,20 +45,10 @@ for label in labels:
         outputs.append(OutputTerm(label_name, label_bbox))
     elif label_name == 'NOT':
         gates.append(UnaryGate(label_name, label_bbox))
-    elif label_name in ['AND','OR','XOR']:
+    elif label_name in ['AND', 'OR', 'XOR', 'NAND', 'NOR']:
         gates.append(BinaryGate(label_name, label_bbox))
     else:
         inputs.append(InputTerm(label_name, label_bbox))
-
-# ============================================================================
-
-'''
-out_img = cv2.imread('logic_chart.jpg')
-for line in lines:
-    cv2.line(out_img, line[0], line[1], (0, 255, 0), 2)
-
-cv2.imwrite('logic_output.png', out_img)
-'''
 
 # ============================================================================
 
