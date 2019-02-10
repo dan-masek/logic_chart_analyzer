@@ -5,8 +5,10 @@ from abc import ABCMeta, abstractmethod, abstractproperty
 class Vertex(object):
     __metaclass__ = ABCMeta
 
-    def __init__(self, max_inputs, max_outputs, bounding_box):
+    def __init__(self, name, min_inputs, max_inputs, max_outputs, bounding_box):
+        self.name = name
         self.inputs = []
+        self.min_inputs = min_inputs
         self.max_inputs = max_inputs
         self.outputs = []
         self.max_outputs = max_outputs
@@ -29,6 +31,17 @@ class Vertex(object):
         x, y = point
         return ((x0 <= x) and (x <= x1)) and ((y0 <= y) and (y <= y1))
         
+    def validate(self):
+        if len(self.inputs) > self.max_inputs:
+            raise RuntimeError("Too many inputs in %s" % self.name)
+        if len(self.inputs) < self.min_inputs:
+            raise RuntimeError("Too few inputs in %s" % self.name)
+        if len(self.outputs) > self.max_outputs:
+            raise RuntimeError("Too few outputs in %s" % self.name)
+            
+    def __str__(self):
+        return self.name
+        
     @abstractproperty
     def expression(self):
         pass
@@ -37,8 +50,7 @@ class Vertex(object):
 
 class InputTerm(Vertex):
     def __init__(self, name, bounding_box):
-        super(InputTerm, self).__init__(0, 1, bounding_box)
-        self.name = name
+        super(InputTerm, self).__init__(name, 0, 0, 1, bounding_box)
         
     @property
     def expression(self):
@@ -48,8 +60,7 @@ class InputTerm(Vertex):
 
 class OutputTerm(Vertex):
     def __init__(self, name, bounding_box):
-        super(OutputTerm, self).__init__(1, 0, bounding_box)
-        self.name = name
+        super(OutputTerm, self).__init__(name, 1, 1, 0, bounding_box)
         
     @property
     def expression(self):
@@ -58,15 +69,14 @@ class OutputTerm(Vertex):
 # ----------------------------------------------------------------------------
 
 class Gate(Vertex):
-    def __init__(self, name, max_inputs, max_outputs, bounding_box):
-        super(Gate, self).__init__(max_inputs, max_outputs, bounding_box)
-        self.name = name
+    def __init__(self, name, min_inputs, max_inputs, max_outputs, bounding_box):
+        super(Gate, self).__init__(name, min_inputs, max_inputs, max_outputs, bounding_box)
 
 # ----------------------------------------------------------------------------
 
 class UnaryGate(Gate):
     def __init__(self, name, bounding_box):
-        super(UnaryGate, self).__init__(name, 1, 1, bounding_box)
+        super(UnaryGate, self).__init__(name, 1, 1, 1, bounding_box)
         
     @property
     def expression(self):
@@ -76,17 +86,22 @@ class UnaryGate(Gate):
 
 class BinaryGate(Gate):
     def __init__(self, name, bounding_box):
-        super(BinaryGate, self).__init__(name, 2, 1, bounding_box)
+        super(BinaryGate, self).__init__(name, 2, 8, 1, bounding_box)
         
     @property
     def expression(self):
-        return "(%s %s %s)" % (self.inputs[0].expression, self.name, self.inputs[1].expression)
+        result = ""
+        for i in range(len(self.inputs)):
+            if i:
+                result += " %s " % self.name
+            result += "%s" % self.inputs[i].expression
+        return "(%s)" % result
         
 # ----------------------------------------------------------------------------
 
 class Node(Vertex):
     def __init__(self, bounding_box):
-        super(Node, self).__init__(1, 1, bounding_box)
+        super(Node, self).__init__("NODE", 1, 1, 1, bounding_box)
         
     @property
     def expression(self):
@@ -96,7 +111,7 @@ class Node(Vertex):
 
 class Connection(Vertex):
     def __init__(self, bounding_box):
-        super(Connection, self).__init__(1, 1, bounding_box)
+        super(Connection, self).__init__("CONN", 1, 1, 1, bounding_box)
         
     @property
     def expression(self):
@@ -106,7 +121,7 @@ class Connection(Vertex):
 
 class Junction(Vertex):
     def __init__(self, bounding_box):
-        super(Junction, self).__init__(1, 2, bounding_box)
+        super(Junction, self).__init__("JUNC", 1, 1, 2, bounding_box)
         
     @property
     def expression(self):

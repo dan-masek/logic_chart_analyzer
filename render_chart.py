@@ -1,17 +1,17 @@
 import numpy as np
 import cv2
 
-from logic_data import dataset_1
+from logic_data import *
 
 # ============================================================================
 
-labels = dataset_1["labels"]
-lines = dataset_1["lines"]
+labels = dataset_2["labels"]
+lines = dataset_2["lines"]
 
 # ============================================================================
 
-#out_img = np.zeros((2000, 3200, 3), np.uint8)
-out_img = cv2.imread('logic_chart_1.jpg')
+out_img = np.zeros((2000, 3200, 3), np.uint8)
+#out_img = cv2.imread('logic_chart_1.jpg')
 
 for line in lines:
     cv2.line(out_img, line[0], line[1], (0, 255, 0), 2)
